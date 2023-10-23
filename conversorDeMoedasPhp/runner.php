@@ -58,7 +58,7 @@
             $dataInicial = date('m-d-Y');
             $dataFinalCotacao = date('m-d-Y');
 
-            $urlApi = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='" . $moeda . "'&@dataInicial='" . "10-20-2023" . "'&@dataFinalCotacao='" . $dataFinalCotacao . "'&\$top=100&\$format=json&\$select=cotacaoCompra";
+            $urlApi = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?@moeda='" . $moeda . "'&@dataInicial='" . $dataInicial . "'&@dataFinalCotacao='" . $dataFinalCotacao . "'&\$top=100&\$format=json&\$select=cotacaoCompra";
 
 
             $data = request($urlApi);
