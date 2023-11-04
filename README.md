@@ -1,3 +1,3 @@
 # Consulta da cotação do dólar
 
-## Descrição
+## Descrição do projeto
