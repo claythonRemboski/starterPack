@@ -1,0 +1,75 @@
+version: "3.9"
+
+volumes:
+    pgadmin_data:
+    db_storage1:
+
+networks:
+    aula_youtube_network:
+        name: aula_youtube_network
+
+
+services:    
+    php-apache:
+        image: webdevops/php-apache-dev:8.2-alpine
+        container_name: api-laravel-back
+        restart: always
+        ports:
+            - "8080:80"
+        volumes:
+            - ./:/app
+        environment:
+            WEB_DOCUMENT_ROOT: /app/public
+        depends_on:
+            - postgresqldb-aula
+        networks:
+            aula_youtube_network:
+                aliases:
+                    - api-laravel-back
+
+    postgres:
+        image: postgres:latest
+        restart: always
+        environment:
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
+        volumes:
+            - db_storage1:/var/lib/postgresql/data
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+            interval: 5s
+            timeout: 5s
+            retries: 10
+
+        networks:
+            aula_youtube_network:
+                aliases:
+                    - postgresql
+
+    portainer-aula:
+        image: portainer/portainer
+        container_name: portainer-aula
+        command: -H unix:///var/run/docker.sock
+        restart: always
+        ports:
+            - 9000:9000
+            - 8000:8000
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./portainer_data:/data
+
+    pgadmin4:
+        image: dpage/pgadmin4
+        container_name: pgadmin4
+        environment:
+        - PGADMIN_DEFAULT_EMAIL=pgadmin@email.com
+        - PGADMIN_DEFAULT_PASSWORD=senhaggadmin
+        ports:
+            - "8081:80"
+        volumes:
+        - pgadmin_data:/var/lib/pgadmin
+        networks:
+            aula_youtube_network:
+                aliases:
+                    - pg-admin-4
